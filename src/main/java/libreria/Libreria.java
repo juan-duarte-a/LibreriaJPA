@@ -16,17 +16,23 @@ public class Libreria {
     private final LibroService libroService;
 
     public static void main(String[] args) {
-        Libreria libreria = new Libreria();
-        libreria.insertData();
-//        libreria.printAutorByNombre("Agatha Christie");
-//        libreria.printLibroByTitulo("A Game of Thrones");
-        Libro libro = libreria.libroService.findLibroByTitulo("A Game of Thrones");
-//        libreria.printLibroByISBN(libro.getIsbn());
-//        libreria.printLibrosByAutor("J.R.R. Tolkien");
-        libreria.libroService.removeLibro(libro);
-        libreria.printLibrosByEditorial("penguin");
-
-        libreria.closeResources();
+        Libreria libreria = null;
+        try {
+            libreria = new Libreria();
+            libreria.insertData();
+    //        libreria.printAutorByNombre("Agatha Christie");
+    //        libreria.printLibroByTitulo("A Game of Thrones");
+            Libro libro = libreria.libroService.findLibroByTitulo("A Game of Thrones");
+    //        libreria.printLibroByISBN(libro.getIsbn());
+    //        libreria.printLibrosByAutor("J.R.R. Tolkien");
+            libreria.libroService.removeLibro(libro);
+            libreria.printLibrosByEditorial("penguin");
+        } finally {
+            if (libreria != null) {
+                System.out.println("Closing resources...");
+                libreria.closeResources();
+            }
+        }
     }
 
     public Libreria() {
