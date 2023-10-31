@@ -15,11 +15,11 @@ public class Libro {
 
     private Integer anio;
 
-    private Integer ejemplares;
+    private int ejemplares;
 
-    private Integer ejemplaresPrestados;
+    private int ejemplaresPrestados;
 
-    private Integer ejemplaresRestantes;
+    private int ejemplaresRestantes;
 
     @Column(nullable = false)
     private boolean alta;
@@ -41,19 +41,6 @@ public class Libro {
         this.anio = anio;
         this.autor = autor;
         this.editorial = editorial;
-    }
-
-    @Override
-    public String toString() {
-        return "Libro:" + "\n" +
-                " - ISBN: " + isbn + "\n" +
-                " - Título: " + titulo + "\n" +
-                " - Año: " + anio + "\n" +
-                " - Autor: " + autor + "\n" +
-                " - Editorial: " + editorial + "\n" +
-                " - Ejemplares: " + ejemplares +
-                ", ejemplares prestados: " + ejemplaresPrestados +
-                ", ejemplares restantes: " + ejemplaresRestantes;
     }
 
     public String getIsbn() {
@@ -80,28 +67,30 @@ public class Libro {
         this.anio = anio;
     }
 
-    public Integer getEjemplares() {
+    public int getEjemplares() {
         return ejemplares;
     }
 
-    public void setEjemplares(Integer ejemplares) {
+    public void setEjemplares(int ejemplares) {
         this.ejemplares = ejemplares;
+        setEjemplaresRestantes();
     }
 
-    public Integer getEjemplaresPrestados() {
+    public int getEjemplaresPrestados() {
         return ejemplaresPrestados;
     }
 
-    public void setEjemplaresPrestados(Integer ejemplaresPrestados) {
+    public void setEjemplaresPrestados(int ejemplaresPrestados) {
         this.ejemplaresPrestados = ejemplaresPrestados;
+        setEjemplaresRestantes();
     }
 
-    public Integer getEjemplaresRestantes() {
+    public int getEjemplaresRestantes() {
         return ejemplaresRestantes;
     }
 
-    public void setEjemplaresRestantes(Integer ejemplaresRestantes) {
-        this.ejemplaresRestantes = ejemplaresRestantes;
+    private void setEjemplaresRestantes() {
+        this.ejemplaresRestantes = this.ejemplares - this.ejemplaresPrestados;
     }
 
     public boolean isAlta() {
@@ -126,6 +115,19 @@ public class Libro {
 
     public void setEditorial(Editorial editorial) {
         this.editorial = editorial;
+    }
+
+    @Override
+    public String toString() {
+        return "Libro:" + "\n" +
+                " - ISBN: " + isbn + "\n" +
+                " - Título: " + titulo + "\n" +
+                " - Año: " + anio + "\n" +
+                " - Autor: " + autor + "\n" +
+                " - Editorial: " + editorial + "\n" +
+                " - Ejemplares: " + ejemplares +
+                ", ejemplares prestados: " + ejemplaresPrestados +
+                ", ejemplares restantes: " + ejemplaresRestantes;
     }
 
 }

@@ -13,7 +13,7 @@ public class Cliente {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private long documento;
 
     @Column(nullable = false)
@@ -74,9 +74,8 @@ public class Cliente {
 
     @Override
     public String toString() {
-        return "Cliente [id=" + id + ", documento=" + documento + ", nombre=" + nombre + ", apellido=" + apellido
-                + ", telefono=" + telefono + "]";
+        return "Cliente [id: " + id + ", documento: " + documento + ", nombre: " + nombre 
+                + " " + apellido + ", teléfono: " + telefono + "]";
     }
     
-
 }

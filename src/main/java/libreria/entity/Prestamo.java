@@ -15,12 +15,11 @@ public class Prestamo {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     @Column(nullable = false)
     private LocalDate fechaPrestamo;
     
-    @Column(nullable = false)
     private LocalDate fechaDevolucion;
 
     @OneToOne
@@ -33,18 +32,17 @@ public class Prestamo {
 
     public Prestamo() { }
 
-    public Prestamo(LocalDate fechaPrestamo, LocalDate fechaDevolucion, Libro libro, Cliente cliente) {
+    public Prestamo(LocalDate fechaPrestamo, Libro libro, Cliente cliente) {
         this.fechaPrestamo = fechaPrestamo;
-        this.fechaDevolucion = fechaDevolucion;
         this.libro = libro;
         this.cliente = cliente;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -82,8 +80,8 @@ public class Prestamo {
 
     @Override
     public String toString() {
-        return "Prestamo [id=" + id + ", fechaPrestamo=" + fechaPrestamo + ", fechaDevolucion=" + fechaDevolucion
-                + ", libro=" + libro + ", cliente=" + cliente + "]";
+        return "Préstamo -> id: " + id + ", fecha préstamo: " + fechaPrestamo + ", fecha devolucion: " + fechaDevolucion
+                + "\n" + libro + "\n" + cliente;
     }
     
 }

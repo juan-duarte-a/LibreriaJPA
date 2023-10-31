@@ -1,12 +1,17 @@
 package libreria;
 
 import libreria.entity.Autor;
+import libreria.entity.Cliente;
 import libreria.entity.Editorial;
 import libreria.entity.Libro;
+import libreria.entity.Prestamo;
 import libreria.service.AutorService;
+import libreria.service.ClienteService;
 import libreria.service.EditorialService;
 import libreria.service.LibroService;
+import libreria.service.PrestamoService;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class Libreria {
@@ -14,22 +19,46 @@ public class Libreria {
     private final AutorService autorService;
     private final EditorialService editorialService;
     private final LibroService libroService;
+    private final ClienteService clienteService;
+    private final PrestamoService prestamoService;
 
     public static void main(String[] args) {
         Libreria libreria = null;
         try {
             libreria = new Libreria();
             libreria.insertData();
-    //        libreria.printAutorByNombre("Agatha Christie");
-    //        libreria.printLibroByTitulo("A Game of Thrones");
-            Libro libro = libreria.libroService.findLibroByTitulo("A Game of Thrones");
-    //        libreria.printLibroByISBN(libro.getIsbn());
-    //        libreria.printLibrosByAutor("J.R.R. Tolkien");
-            libreria.libroService.removeLibro(libro);
-            libreria.printLibrosByEditorial("penguin");
+
+            Libro libro = libreria.libroService.findLibroByTitulo("For Whom the Bell Tolls");
+            libro.setEjemplares(5);
+            libreria.libroService.updateLibro(libro);
+
+            libro = libreria.libroService.findLibroByTitulo("Murder on the Orient Express");
+            libro.setEjemplares(10);
+            libreria.libroService.updateLibro(libro);
+
+            Prestamo prestamo = libreria.prestarLibro(
+                80234678, 
+                "For Whom the Bell Tolls", 
+                LocalDate.now().minusDays(15));
+
+            System.out.println(prestamo);
+
+            prestamo = libreria.prestarLibro(
+                10468596, 
+                "Murder on the Orient Express", 
+                LocalDate.now().minusDays(10));
+
+            System.out.println();
+            System.out.println(prestamo);
+
+            libro = libreria.libroService.findLibroByTitulo("For Whom the Bell Tolls");
+            libreria.devolverLibro(80234678, libro.getIsbn(), LocalDate.now());
+
+            System.out.println();
+            libreria.prestamoService.findPrestamosByCliente(80234678).forEach(System.out::println);
         } finally {
             if (libreria != null) {
-                System.out.println("Closing resources...");
+                System.out.println("\nCerrando recursos...");
                 libreria.closeResources();
             }
         }
@@ -39,6 +68,8 @@ public class Libreria {
         autorService = new AutorService();
         editorialService = new EditorialService();
         libroService = new LibroService();
+        clienteService = new ClienteService();
+        prestamoService = new PrestamoService();
     }
 
     public void printAutorByNombre(String nombre) {
@@ -61,16 +92,27 @@ public class Libreria {
         libroService.findLibrosByEditorial(nombreEditorial).forEach(System.out::println);
     }
 
+    public Prestamo prestarLibro(long documentoCliente, String tituloLibro, LocalDate fechaPrestamo) {
+        return prestamoService.prestarLibro(documentoCliente, tituloLibro, fechaPrestamo);
+    }
+
+    public void devolverLibro(long documentoCliente, String isbn, LocalDate fechaDevolucion) {
+        prestamoService.devolverLibro(documentoCliente, isbn, fechaDevolucion);
+    }
+
     public void closeResources() {
         autorService.closeResources();
         editorialService.closeResources();
         libroService.closeResources();
+        clienteService.closeResources();
+        prestamoService.closeResources();
     }
 
     public void insertData() {
         ArrayList<Autor> autores = new ArrayList<>();
         ArrayList<Editorial> editoriales = new ArrayList<>();
         ArrayList<Libro> libros = new ArrayList<>();
+        ArrayList<Cliente> clientes = new ArrayList<>();
 
         autores.add(new Autor("J.K. Rowling"));
         autores.add(new Autor("George R.R. Martin"));
@@ -121,9 +163,13 @@ public class Libreria {
         libros.add(new Libro("Harry Potter and the Order of the Phoenix", 2003, autores.get(0), editoriales.get(3)));
         libros.add(new Libro("A Dance with Dragons", 2011, autores.get(1), editoriales.get(0)));
 
+        clientes.add(new Cliente(80234678, "Juan", "Duarte"));
+        clientes.add(new Cliente(10468596, "Laura", "Rodríguez"));
+
         autores.forEach(autorService::saveAutor);
         editoriales.forEach(editorialService::saveEditorial);
         libros.forEach(libroService::saveLibro);
+        clientes.forEach(clienteService::saveCliente);
     }
 
 }
