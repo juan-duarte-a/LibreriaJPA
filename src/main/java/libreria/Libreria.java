@@ -55,6 +55,9 @@ public class Libreria {
             libreria.devolverLibro(80234678, libro.getIsbn(), LocalDate.now());
 
             System.out.println();
+            libreria.printLibroByTitulo("For Whom the Bell Tolls");
+
+            System.out.println();
             libreria.prestamoService.findPrestamosByCliente(80234678).forEach(System.out::println);
         } finally {
             if (libreria != null) {

@@ -35,8 +35,7 @@ public class PrestamoService {
     }
 
     public List<Prestamo> findPrestamosByCliente(long documentoCliente) {
-        List<Prestamo> prestamos = prestamoDAO.findPrestamosByCliente(documentoCliente);
-        return prestamos;
+        return prestamoDAO.findPrestamosByCliente(documentoCliente);
     }
 
     public Prestamo prestarLibro(long documentoCliente, String tituloLibro, LocalDate fechaPrestamo) {
@@ -61,8 +60,7 @@ public class PrestamoService {
         }
 
         Prestamo prestamo = findPrestamosByCliente(documentoCliente).stream()
-                .filter(p -> p.getCliente().getDocumento() == documentoCliente
-                        && p.getLibro().getIsbn().equals(isbn))
+                .filter(p -> p.getLibro().getIsbn().equals(isbn))
                 .findFirst().orElseThrow(
                         () -> new NoSuchElementException("No hay préstamos del libro " + libro.getIsbn()
                                 + " y cliente con documento " + documentoCliente));
